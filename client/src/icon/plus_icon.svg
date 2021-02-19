@@ -1,0 +1,9 @@
+<svg width="206" height="206"  fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="plus icon">
+<rect id="bg" width="206" height="206" rx="31" fill="black"/>
+<g id="plus">
+<path d="M84 28H120V177H84V28Z" fill="white"/>
+<path d="M177 84V120H28V84H177Z" fill="white"/>
+</g>
+</g>
+</svg>
