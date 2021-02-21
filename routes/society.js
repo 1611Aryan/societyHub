@@ -6,12 +6,13 @@ const {
   uploadSingle,
   updateSociety,
   getSocietyById,
+  getSocietyByName,
 } = require("../controllers/society.controller");
 
 //?Gets all the societies
 router.route("/").get(getSocieties);
 
-//?Gets one society based on the name
+//?Gets society based on ID
 router.route("/:id").get(getSocietyById);
 
 //?Post request to create a society

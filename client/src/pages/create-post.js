@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import Styled from "styled-components";
 
 const PORT = process.env.PORT || 5000;
@@ -13,15 +13,35 @@ const CreatePost = () => {
     date: "",
   });
 
+  const [societies, setSocieties] = useState(null);
+
   const societyURL =
     process.env.NODE_ENV === "production"
       ? `/society/${postData.societyName}`
-      : `http://${window.location.hostname}:${PORT}/society/${postData.societyName}`;
+      : `http://${window.location.hostname}:${PORT}/society`;
 
   const createPostURL =
     process.env.NODE_ENV === "production"
       ? `/post/create`
       : `http://${window.location.hostname}:${PORT}/post/create`;
+
+  const Societies = async () => {
+    await axios
+      .get(societyURL)
+      .then(res =>
+        setSocieties(
+          res.data.map(data => {
+            return { name: data.name, id: data._id };
+          })
+        )
+      )
+      .catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    Societies();
+  }, []);
+
   const changeHandler = e => {
     setPostData(prevInfo => ({
       ...prevInfo,
@@ -44,16 +64,13 @@ const CreatePost = () => {
     let request;
     const formData = new FormData();
 
-    request = await axios
-      .get(societyURL)
-      .then(res => {
-        formData.append("societyId", res.data._id);
-        return true;
-      })
-      .catch(err => {
-        console.error(err);
-        return false;
-      });
+    societies.forEach(society => {
+      if (society.name === postData.societyName) {
+        request = true;
+        formData.append("societyId", society.id);
+      }
+    });
+
     if (request) {
       formData.append("societyName", postData.societyName);
       formData.append("caption", postData.caption);
